@@ -55,7 +55,7 @@ BASE_ASSET_HOST         = "#{IMAGE_SERVER}/#{IMAGE_SERVER_APP_CODE}"
 SOLR_SERVER = "http://10.1.1.1:8080/solr"
 
 # 10.1.1.1:8080 = QA
-SOLR_SERVER = "http://10.1.1.1:8080/solr/solrtv"
+SOLR_TV_SERVER = "http://10.1.1.1:8080/solr/solrtv"
 
 API_DJ_URI              = "http://dj01.com.com" #"http://10.1.1.1"
 DJ_RANDOM_TOTAL         = 3
@@ -94,7 +94,6 @@ SOME_ANALYTICS_URI = "analytics.com"
 WV_LICENCE_SERVERS    = ["http://licence.com/"]
 
 # Flash player settings
-BLOCK_GOOGLE_TV         = false
 OTHER_ANALYTICS_SERVER  = "http://nalytics..com"
 
 BUSTER_RSS       = "http://buster.com"
