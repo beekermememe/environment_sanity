@@ -10,6 +10,13 @@ describe ConstantExtractor do
     @test_array.push(" TEST_VAL3 = ['An Array Constant',1.2]")
     @test_array.push(" local.variable = 'Not a constant'")
     @test_array.push(" TEST_VAL4 = {'a' => 'has type constant'}")
+
+    @test_array_with_dup = []
+    @test_array_with_dup.push(" # This is a comment line")
+    @test_array_with_dup.push(" TEST_VAL1 = 12.3445 # a constant with a comment")
+    @test_array_with_dup.push(" TEST_VAL1 = 'A string constant'")
+ 
+
   end
 
   it "should open the file passed" do
@@ -40,11 +47,21 @@ describe ConstantExtractor do
   end
   
   it "should assign the key of the result hash to be the constant name" do
-    
+     result = ConstantExtractor.extract_comments(@test_array)
+     result = ConstantExtractor.extract_constants(result)
+     result.keys[0].should == "TEST_VAL1"
   end
   
   it "should assign the value of the results hash to be the constant value" do
-    
+     result = ConstantExtractor.extract_comments(@test_array)
+     result = ConstantExtractor.extract_constants(result)
+     result.values[0].should == "12.3445 "
+  end
+
+  it "should detect duplicate entries for a constant" do
+     result = ConstantExtractor.extract_comments(@test_array_with_dup)
+     result = ConstantExtractor.extract_constants(result)
+     result["error"].should == "Error duplicate entries for - TEST_VAL1"
   end
 
   it "should remove comments" do

@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["beekermememe"]
   s.email       = ["bkeogh123@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{A Gem that provides the ability to compare constants in different environment files}
+  s.description = %q{I had an issue with many environments QA,INT,STAGING,PRODUCTION and missing constants during deploy. This GEM provides support to check the existance of CONSTANTS from a master environment file. My use case is I use this in a spec file and also a preflight check in my cap deploy to make sure that production has all the constants defined in QA.}
 
   s.rubyforge_project = "environment_sanity"
 

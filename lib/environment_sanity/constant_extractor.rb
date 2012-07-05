@@ -24,6 +24,7 @@ class ConstantExtractor
     array_of_lines.each do |line|
       newline = line.gsub(/^\s*/,"") # remove indents
       newline = newline.gsub(/\#.*/,"")
+      newline = newline.gsub(/$\w*/,"") # remove trailing white space after deleting a comment
       results.push(newline) unless newline == ""
     end
     results
