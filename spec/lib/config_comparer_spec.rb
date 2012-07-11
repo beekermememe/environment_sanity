@@ -2,44 +2,74 @@ require [File.dirname(__FILE__),"/../spec_helper"].join
 
 describe ConfigComparer do
   context "initialize" do
+    before :each do
+      @list1= {'int' => {
+        'WATCHMUST' => 12345,
+        'NOTSO_IMPORTANT' => '12345'
+        }
+      }
+      @list2= {'production' => {
+        'WATCHMUST' => 12345,
+        'NOTSO_IMPORTANT' => '12346'
+        }
+      }
+      @master_list= {'qa' => {
+        'WATCHMUST' => 12345,
+        'NOTSO_IMPORTANT' => '12346'
+        }
+      }
+
+      @happy_path_params = {
+        :non_master_can_have_more_consants => true,
+        :log_differences_in_values => true,
+        :verbose => true,
+        :lists_to_match_master_list => [@list1,@list2],
+        :filenames_to_ignore => ['int'],
+        :list_of_constants_that_must_match => ['MATCHMUST'],
+        :master_list => @master_list,
+        :allow_non_master_to_have_more_constants => true
+      }
+      @cc = ConfigComparer.new(@happy_path_params)
+    end
+
     it "should assign the list of files to check" do
-      pending
+      @cc.lists_to_match_master_list.should == [@list1,@list2]
     end
   
     it "should assign the master file" do
-      pending
+      @cc.master_list.should == @master_list
     end 
 
     it "should assign the parameter to output the differences" do
-      pending
+      @cc.log_differences_in_values.should == true
     end
 
     it "should assign the parameter to specify files to skip" do
-      pending
+      @cc.filenames_to_ignore.should == ['int']
     end
 
     it "should assign the parameter that is a list of parameters that need to match exactly" do
-      pending
+      @cc.list_of_constants_that_must_match.should == ['MATCHMUST']
     end
 
     it "should assign an empty array to the parameters that must be skipped if not specified" do
-      pending
+      
     end
 
     it "should prepare the differences hash" do
-      pending
+       @cc.differences.is_a?(Hash).should == true
     end
 
     it "should prepare the pass_fail hash" do
-
+       @cc.pass_fail.is_a?(Hash).should == true
     end
 
     it "should populate the verbose parameter" do
-
+       @cc.verbose.should == true
     end
 
     it "should populate the flag to allow the files to have more constants than the master" do
-
+       @cc.allow_non_master_to_have_more_constants.should == true
     end
   end
 
