@@ -20,7 +20,7 @@ class ConfigComparer
     @filenames_to_ignore = params[:filenames_to_ignore]
     @differences = {}
     @pass_fail = {}
-    @lists_to_match_master_list.each { |list_entry| @differences[list_entry[:filename]] = [] ; @pass_fail[list_entry[:filename]] = ""}
+    @lists_to_match_master_list.each { |list_entry| @differences[list_entry[:filename]] = [] ; @pass_fail[list_entry[:filename]] = ""} unless @lists_to_match_master_list.nil?
     @list_of_constants_that_must_match = params[:list_of_constants_that_must_match].nil? ? [] : params[:list_of_constants_that_must_match]
   end
 
@@ -58,7 +58,19 @@ class ConfigComparer
 
   end
 
-
+  def preflight_check
+    if @lists_to_match_master_list.nil?
+      return "FAIL - No files to compare"
+    elsif @master_list.nil?
+      return "FAIL - Master list empty"
+    elsif !@list_of_constants_that_must_match.nil? && !@list_of_constants_that_must_match.is_a?(Array)
+      return "FAIL - list of constants must be an Array"
+    elsif check_file_formats != "PASS"
+      return "FAIL - #{check_file_formats}"
+    elsif !@list_of_constants_that_must_match.nil? && master_contains_match_constants == "PASS"
+      return "FAILS - #{master_contains_match_constants}"
+    end
+  end
 
 
 
