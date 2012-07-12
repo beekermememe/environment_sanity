@@ -66,12 +66,46 @@ class ConfigComparer
     elsif !@list_of_constants_that_must_match.nil? && !@list_of_constants_that_must_match.is_a?(Array)
       return "FAIL - list of constants must be an Array"
     elsif check_file_formats != "PASS"
-      return "FAIL - #{check_file_formats}"
-    elsif !@list_of_constants_that_must_match.nil? && master_contains_match_constants == "PASS"
-      return "FAILS - #{master_contains_match_constants}"
+      return "#{check_file_formats}"
+    elsif !@list_of_constants_that_must_match.nil? && (master_contains_match_constants != "PASS")
+      return "#{master_contains_match_constants}"
     end
+
+    return "PASS"
   end
 
+  def check_file_formats
 
+    if !@master_list.is_a?(Hash)
+      return "FAIL - Master is incorrect format"
+    elsif (@master_list.size != 1)
+      return "FAIL - Master is incorrect format"
+    elsif !(@master_list.first[1].is_a?(Hash))
+      return "FAIL - Master is incorrect format"
+    elsif !(@master_list.first[1].size > 0)
+      return "FAIL - Master is incorrect format"
+    end
 
+    @lists_to_match_master_list.each do |list|
+      if !list.is_a?(Hash)
+        return "FAIL - File to compare is incorrect format"
+      elsif (list.size != 1)
+        return "FAIL - File to compare is incorrect format"
+      elsif !(list.first[1].is_a?(Hash))
+        return "FAIL - File to compare is incorrect format"
+      elsif !(list.first[1].size > 0)
+        return "FAIL - File to compare is incorrect format"
+      end
+    end
+    return "PASS"
+  end
+
+  def master_contains_match_constants
+    @list_of_constants_that_must_match.each do |constant_to_match|
+      if @master_list.first[1][constant_to_match].nil?
+        return "FAIL - Master does not have constant - #{constant_to_match}"
+      end
+    end
+    return "PASS"
+  end
 end

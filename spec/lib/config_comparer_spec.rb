@@ -76,12 +76,12 @@ describe ConfigComparer do
   context "preflight check" do
     before :each do
       @list1= {'int' => {
-        'WATCHMUST' => 12345,
+        'MATCHMUST' => 12345,
         'NOTSO_IMPORTANT' => '12345'
         }
       }
       @list2= {'production' => {
-        'WATCHMUST' => 12345,
+        'MATCHMUST' => 12345,
         'NOTSO_IMPORTANT' => '12346'
         }
       }
@@ -89,7 +89,7 @@ describe ConfigComparer do
       @bad_format_list = {'a banana' => []}
 
       @master_list= {'qa' => {
-        'WATCHMUST' => 12345,
+        'MATCHMUST' => 12345,
         'NOTSO_IMPORTANT' => '12346'
         }
       }
@@ -136,6 +136,18 @@ describe ConfigComparer do
         :allow_non_master_to_have_more_constants => true
       }
 
+      @bad_master_format_param = {
+        :non_master_can_have_more_consants => true,
+        :log_differences_in_values => true,
+        :verbose => true,
+        :lists_to_match_master_list => [@list1,@list2],
+        :filenames_to_ignore => ['int'],
+        :list_of_constants_that_must_match => ['MATCHMUST'],
+        :master_list => @bad_format_list_params,
+        :allow_non_master_to_have_more_constants => true
+      }
+
+
       @bad_constants_list_params = {
         :non_master_can_have_more_consants => true,
         :log_differences_in_values => true,
@@ -179,12 +191,12 @@ describe ConfigComparer do
 
     it "should fail if the files to compare are not in the correct format" do
       @cc = ConfigComparer.new(@bad_format_list_params)
-      @cc.preflight_check.should == "FAIL - Non Master file is incorrect format"
+      @cc.preflight_check.should == "FAIL - File to compare is incorrect format"
     end
 
     it "should fail if the master file is not in the correct format" do
       @cc = ConfigComparer.new(@bad_master_format_param)
-      @cc.preflight_check.should == "FAIL - Mater is incorrect format"
+      @cc.preflight_check.should == "FAIL - Master is incorrect format"
     end
 
     it "should fail if the constants to match are not in the correct format" do
@@ -194,9 +206,13 @@ describe ConfigComparer do
 
     it "should fail if the constants to match are not in the master file" do
       @cc = ConfigComparer.new(@constant_not_in_master_params)
-      @cc.preflight_check.should == "FAIL - master does not have constant - MUSTMATCHMISSING"
+      @cc.preflight_check.should == "FAIL - Master does not have constant - MATCHMUSTMISSING"
     end
 
+    it "should pass preflight if all parameters are in order" do
+      @cc=ConfigComparer.new(@happy_path_params)
+      @cc.preflight_check.should == "PASS"
+    end
   end
 
   context "running comparision" do
