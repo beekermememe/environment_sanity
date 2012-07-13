@@ -52,7 +52,6 @@ IMAGE_SERVER_APP_CODE   = 'tester'
 IMAGE_SERVER            = "http://img.com"
 BASE_ASSET_HOST         = "#{IMAGE_SERVER}/#{IMAGE_SERVER_APP_CODE}"
 # 10.1.1.1 = INT
-SOLR_SERVER = "http://10.1.1.1:8080/solr"
 
 # 10.1.1.1:8080 = QA
 SOLR_SERVER = "http://10.1.1.1:8080/solr/solrtv"
@@ -94,7 +93,6 @@ SOME_ANALYTICS_URI = "analytics.com"
 WV_LICENCE_SERVERS    = ["http://licence.com/"]
 
 # Flash player settings
-BLOCK_GOOGLE_TV         = false
 OTHER_ANALYTICS_SERVER  = "http://nalytics..com"
 
 BUSTER_RSS       = "http://buster.com"

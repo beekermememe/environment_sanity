@@ -38,26 +38,6 @@ class ConfigComparer
     end
   end
 
-  def create_master_array
-
-
-  end
-
-  def compare_list_to_master
-
-
-  end
-
-  def show_results
-
-
-  end
-
-  def show_differences
-
-
-  end
-
   def preflight_check
     if @lists_to_match_master_list.nil?
       return "FAIL - No files to compare"
