@@ -1,5 +1,10 @@
-require "environment_sanity/version"
+require 'environment_sanity/config_loader'
+require 'environment_sanity/constant_extractor'
+require 'environment_sanity/config_comparer'
+require 'environment_sanity/environment_sanity_core'
 
-module EnvironmentSanity
-  # Your code goes here...
+
+class EnvironmentSanity
+  include EnvironmentSanityCore
 end
+

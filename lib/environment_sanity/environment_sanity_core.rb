@@ -1,4 +1,4 @@
-class RunComparison
+module EnvironmentSanityCore
 
   def initialize(config)
     @master_file = config[:master_file]
