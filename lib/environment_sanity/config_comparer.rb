@@ -8,7 +8,6 @@ class ConfigComparer
     :filenames_to_ignore,
     :differences,
     :pass_fail,
-    :lists_to_match_master_list,
     :list_of_constants_that_must_match
 
   def initialize(params = {})
@@ -31,10 +30,11 @@ class ConfigComparer
       create_master_array
       @lists_to_match_master_list.each do |list_entry|
         @list_to_compare = list_entry
-        compare_list_to_master
+        result = compare_list_to_master
+        return result if result.include?("FAIL")
       end
       show_differences if @log_differences_in_value
-      show_results
+      return "PASS"
     end
   end
 
@@ -87,5 +87,30 @@ class ConfigComparer
       end
     end
     return "PASS"
+  end
+
+  def compare_list_to_master(test_list)
+    test_list = @list_to_compare
+    @list_of_constants_that_must_match.each do |constant|
+      if @master_list.first[1][constant] != test_list[1][constant]
+        return "FAIL - Mastet - Test file do not have constant #{constant} matching"
+      end
+    end
+    list_of_constants = @master_list.first[1].each_key.map { |constant| constant }
+    test_list[1].each_key do |const|
+      if @log_differences_in_values && (@master_list.first[1][const] != test_list[1][const])
+        @differences[test_list[0]].push("Constant #{const} #{@master_list.first[1][const]} != #{test_list[1][const]}")
+      end
+      list_of_constants.delete(const)
+    end
+    return "FAIL - Test File Missing Constants #{list_of_constants.join(",")}" if list_of_constants.count > 0
+    return "PASS"
+  end
+
+  def show_differences
+    @differences.each do |test_file,diffs|
+      puts "#{test_file}"
+      diffs.each { |diff| puts "  ---   #{diff}"}
+    end
   end
 end
